@@ -1,4 +1,4 @@
-"""Generate an HTML page with the data of every animal in animals_data.json."""
+"""Generate an HTML page with a card for every animal in animals_data.json."""
 import json
 
 
@@ -13,15 +13,17 @@ output = ""
 for animal in animals_data:
     characteristics = animal.get("characteristics", {})
     locations = animal.get("locations", [])
-    if animal.get("name"):
-        output += f"Name: {animal['name']}\n"
+    output += '<li class="cards__item">\n'
+    output += f'  <div class="card__title">{animal.get("name", "Unknown")}</div>\n'
+    output += '  <p class="card__text">\n'
     if characteristics.get("diet"):
-        output += f"Diet: {characteristics['diet']}\n"
+        output += f"      <strong>Diet:</strong> {characteristics['diet']}<br/>\n"
     if locations:
-        output += f"Location: {locations[0]}\n"
+        output += f"      <strong>Location:</strong> {locations[0]}<br/>\n"
     if characteristics.get("type"):
-        output += f"Type: {characteristics['type']}\n"
-    output += "\n"
+        output += f"      <strong>Type:</strong> {characteristics['type']}<br/>\n"
+    output += "  </p>\n"
+    output += "</li>\n"
 
 with open("animals_template.html", "r", encoding="utf-8") as template_file:
     template = template_file.read()
