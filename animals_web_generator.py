@@ -1,4 +1,4 @@
-"""Print the data of every animal in animals_data.json."""
+"""Generate an HTML page with the data of every animal in animals_data.json."""
 import json
 
 
@@ -9,15 +9,24 @@ def load_data(file_path):
 
 
 animals_data = load_data("animals_data.json")
+output = ""
 for animal in animals_data:
     characteristics = animal.get("characteristics", {})
     locations = animal.get("locations", [])
     if animal.get("name"):
-        print(f"Name: {animal['name']}")
+        output += f"Name: {animal['name']}\n"
     if characteristics.get("diet"):
-        print(f"Diet: {characteristics['diet']}")
+        output += f"Diet: {characteristics['diet']}\n"
     if locations:
-        print(f"Location: {locations[0]}")
+        output += f"Location: {locations[0]}\n"
     if characteristics.get("type"):
-        print(f"Type: {characteristics['type']}")
-    print()
+        output += f"Type: {characteristics['type']}\n"
+    output += "\n"
+
+with open("animals_template.html", "r", encoding="utf-8") as template_file:
+    template = template_file.read()
+
+html = template.replace("__REPLACE_ANIMALS_INFO__", output)
+
+with open("animals.html", "w", encoding="utf-8") as html_file:
+    html_file.write(html)
